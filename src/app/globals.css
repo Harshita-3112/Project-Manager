@@ -11,7 +11,7 @@
   --sidebar: #161a25;
   --sidebar-text: #a3a9b8;
   --radius: 10px;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--text);
 }
 

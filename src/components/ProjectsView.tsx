@@ -1,9 +1,26 @@
-import { useState } from 'react';
-import { PROJECT_COLORS } from '../data.js';
-import Board from './Board.jsx';
-import { ArrowLeftIcon, PlusIcon, TrashIcon } from './Icons.jsx';
+'use client';
 
-function NewProjectForm({ onCreate, onCancel }) {
+import { useState } from 'react';
+import { PROJECT_COLORS } from '@/data';
+import Board from './Board';
+import { ArrowLeftIcon, PlusIcon, TrashIcon } from './Icons';
+import type { Project, Task } from '@/types';
+import type { BoardHandlers } from './App';
+
+interface NewProjectFormProps {
+  onCreate: (project: Omit<Project, 'id'>) => void;
+  onCancel: () => void;
+}
+
+interface ProjectsViewProps extends BoardHandlers {
+  tasks: Task[];
+  activeProjectId: string | null;
+  onSelectProject: (id: string | null) => void;
+  onAddProject: (project: Omit<Project, 'id'>) => Project;
+  onDeleteProject: (id: string) => void;
+}
+
+function NewProjectForm({ onCreate, onCancel }: NewProjectFormProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [color, setColor] = useState(PROJECT_COLORS[0]);
@@ -41,7 +58,7 @@ function NewProjectForm({ onCreate, onCancel }) {
 
 export default function ProjectsView({
   tasks, projects, activeProjectId, onSelectProject, onAddProject, onDeleteProject, onMove, onOpenTask, onAddTask,
-}) {
+}: ProjectsViewProps) {
   const [creating, setCreating] = useState(false);
   const project = projects.find((p) => p.id === activeProjectId);
 

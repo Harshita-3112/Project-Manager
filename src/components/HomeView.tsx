@@ -1,15 +1,23 @@
-import { useState } from 'react';
-import { STATUSES } from '../data.js';
-import Board from './Board.jsx';
-import { PlusIcon } from './Icons.jsx';
+'use client';
+
+import { useState, type CSSProperties } from 'react';
+import { STATUSES } from '@/data';
+import Board from './Board';
+import { PlusIcon } from './Icons';
+import type { Task } from '@/types';
+import type { BoardHandlers } from './App';
 
 const greeting = () => {
   const h = new Date().getHours();
   return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
 };
 
-export default function HomeView({ tasks, projects, onMove, onOpenTask, onAddTask }) {
-  const [filter, setFilter] = useState('all');
+interface HomeViewProps extends BoardHandlers {
+  tasks: Task[];
+}
+
+export default function HomeView({ tasks, projects, onMove, onOpenTask, onAddTask }: HomeViewProps) {
+  const [filter, setFilter] = useState<string>('all');
   const visible = filter === 'all' ? tasks : tasks.filter((t) => t.projectId === filter);
 
   return (
@@ -38,7 +46,7 @@ export default function HomeView({ tasks, projects, onMove, onOpenTask, onAddTas
 
       <div className="stats">
         {STATUSES.map((s) => (
-          <div key={s.id} className="stat" style={{ '--accent': s.color }}>
+          <div key={s.id} className="stat" style={{ '--accent': s.color } as CSSProperties}>
             <span className="stat-label">{s.label}</span>
             <span className="stat-value">{visible.filter((t) => t.status === s.id).length}</span>
           </div>

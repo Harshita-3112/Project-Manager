@@ -1,12 +1,24 @@
-import { HomeIcon, FolderIcon, InboxIcon } from './Icons.jsx';
+import { HomeIcon, FolderIcon, InboxIcon } from './Icons';
 
-const NAV = [
+import type { ComponentType } from 'react';
+import type { Project, View } from '@/types';
+
+interface SidebarProps {
+  view: View;
+  onNavigate: (view: View) => void;
+  projects: Project[];
+  activeProjectId: string | null;
+  onOpenProject: (id: string) => void;
+  unreadCount: number;
+}
+
+const NAV: { id: View; label: string; Icon: ComponentType }[] = [
   { id: 'home', label: 'Home', Icon: HomeIcon },
   { id: 'projects', label: 'Projects', Icon: FolderIcon },
   { id: 'inbox', label: 'Inbox', Icon: InboxIcon },
 ];
 
-export default function Sidebar({ view, onNavigate, projects, activeProjectId, onOpenProject, unreadCount }) {
+export default function Sidebar({ view, onNavigate, projects, activeProjectId, onOpenProject, unreadCount }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="brand">

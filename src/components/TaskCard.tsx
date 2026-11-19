@@ -1,12 +1,20 @@
-import { CalendarIcon } from './Icons.jsx';
+import { CalendarIcon } from './Icons';
 
-const formatDate = (iso) =>
+import type { Project, Task } from '@/types';
+
+interface TaskCardProps {
+  task: Task;
+  project?: Project;
+  onClick: () => void;
+}
+
+const formatDate = (iso: string) =>
   new Date(iso + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 
-const isOverdue = (task) =>
+const isOverdue = (task: Task) =>
   task.dueDate && task.status !== 'completed' && task.dueDate < new Date().toISOString().slice(0, 10);
 
-export default function TaskCard({ task, project, onClick }) {
+export default function TaskCard({ task, project, onClick }: TaskCardProps) {
   return (
     <article
       className="card"

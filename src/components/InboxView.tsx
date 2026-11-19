@@ -1,4 +1,13 @@
-const timeAgo = (ts) => {
+import type { Notification } from '@/types';
+
+interface InboxViewProps {
+  inbox: Notification[];
+  onMarkRead: (id: string) => void;
+  onMarkAllRead: () => void;
+  onClear: () => void;
+}
+
+const timeAgo = (ts: number) => {
   const s = Math.floor((Date.now() - ts) / 1000);
   if (s < 60) return 'just now';
   const m = Math.floor(s / 60);
@@ -8,7 +17,7 @@ const timeAgo = (ts) => {
   return new Date(ts).toLocaleDateString();
 };
 
-export default function InboxView({ inbox, onMarkRead, onMarkAllRead, onClear }) {
+export default function InboxView({ inbox, onMarkRead, onMarkAllRead, onClear }: InboxViewProps) {
   const unread = inbox.filter((n) => !n.read).length;
 
   return (

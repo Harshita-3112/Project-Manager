@@ -1,27 +1,43 @@
-import { useEffect, useState } from 'react';
-import { PRIORITIES, STATUSES } from '../data.js';
+'use client';
 
-export default function TaskModal({ task, defaultStatus, defaultProjectId, projects, onSave, onDelete, onClose }) {
-  const [form, setForm] = useState(
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { PRIORITIES, STATUSES } from '@/data';
+import type { Project, StatusId, Task, TaskDraft } from '@/types';
+
+interface TaskModalProps {
+  task?: Task;
+  defaultStatus?: StatusId;
+  defaultProjectId?: string;
+  projects: Project[];
+  onSave: (task: TaskDraft) => void;
+  onDelete: (id: string) => void;
+  onClose: () => void;
+}
+
+export default function TaskModal({ task, defaultStatus, defaultProjectId, projects, onSave, onDelete, onClose }: TaskModalProps) {
+  const [form, setForm] = useState<TaskDraft>(
     task ?? {
       title: '',
       description: '',
       status: defaultStatus ?? 'todo',
       priority: 'Medium',
       dueDate: '',
-      projectId: defaultProjectId,
+      projectId: defaultProjectId ?? '',
     }
   );
 
   useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
+  const set =
+    (field: keyof TaskDraft) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setForm({ ...form, [field]: e.target.value });
 
-  const submit = (e) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.title.trim()) return;
     onSave({ ...form, title: form.title.trim() });

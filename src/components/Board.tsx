@@ -1,14 +1,24 @@
+'use client';
+
 import { useState } from 'react';
-import { STATUSES } from '../data.js';
-import TaskCard from './TaskCard.jsx';
-import { PlusIcon } from './Icons.jsx';
+import { STATUSES } from '@/data';
+import type { StatusId, Task } from '@/types';
+import type { BoardHandlers } from './App';
+import TaskCard from './TaskCard';
+import { PlusIcon } from './Icons';
+
+interface BoardProps extends BoardHandlers {
+  tasks: Task[];
+  projectId?: string;
+  showProject?: boolean;
+}
 
 /**
  * Kanban board with the four status columns.
  * Cards can be dragged between columns (native HTML5 drag & drop).
  */
-export default function Board({ tasks, projects, projectId, showProject, onMove, onOpenTask, onAddTask }) {
-  const [dragOver, setDragOver] = useState(null);
+export default function Board({ tasks, projects, projectId, showProject, onMove, onOpenTask, onAddTask }: BoardProps) {
+  const [dragOver, setDragOver] = useState<StatusId | null>(null);
 
   return (
     <div className="board">
@@ -23,7 +33,7 @@ export default function Board({ tasks, projects, projectId, showProject, onMove,
               setDragOver(status.id);
             }}
             onDragLeave={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget)) setDragOver(null);
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragOver(null);
             }}
             onDrop={(e) => {
               e.preventDefault();
@@ -43,7 +53,7 @@ export default function Board({ tasks, projects, projectId, showProject, onMove,
                 <TaskCard
                   key={task.id}
                   task={task}
-                  project={showProject ? projects.find((p) => p.id === task.projectId) : null}
+                  project={showProject ? projects.find((p) => p.id === task.projectId) : undefined}
                   onClick={() => onOpenTask(task)}
                 />
               ))}
