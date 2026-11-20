@@ -6,6 +6,8 @@ import HomeView from './HomeView';
 import ProjectsView from './ProjectsView';
 import InboxView from './InboxView';
 import TaskModal from './TaskModal';
+import SettingsView from './SettingsView';
+import HelpView from './HelpView';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { seedInbox, seedProjects, seedTasks, statusLabel, uid } from '@/data';
 import type { Notification, Project, StatusId, Task, TaskDraft, View } from '@/types';
@@ -86,6 +88,14 @@ export default function App() {
     setView('projects');
   };
 
+  const resetData = () => {
+    setProjects(seedProjects);
+    setTasks(seedTasks);
+    setInbox(seedInbox);
+    setActiveProjectId(null);
+    setView('home');
+  };
+
   const unreadCount = inbox.filter((n) => !n.read).length;
 
   const boardProps: BoardHandlers = {
@@ -129,6 +139,8 @@ export default function App() {
             onClear={() => setInbox([])}
           />
         )}
+        {view === 'settings' && <SettingsView onResetData={resetData} />}
+        {view === 'help' && <HelpView />}
       </main>
 
       {modal && (

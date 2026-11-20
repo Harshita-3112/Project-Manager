@@ -1,4 +1,4 @@
-import { HomeIcon, FolderIcon, InboxIcon } from './Icons';
+import { HomeIcon, FolderIcon, InboxIcon, SettingsIcon, HelpIcon } from './Icons';
 
 import type { ComponentType } from 'react';
 import type { Project, View } from '@/types';
@@ -12,10 +12,17 @@ interface SidebarProps {
   unreadCount: number;
 }
 
-const NAV: { id: View; label: string; Icon: ComponentType }[] = [
+type NavItem = { id: View; label: string; Icon: ComponentType };
+
+const NAV: NavItem[] = [
   { id: 'home', label: 'Home', Icon: HomeIcon },
   { id: 'projects', label: 'Projects', Icon: FolderIcon },
   { id: 'inbox', label: 'Inbox', Icon: InboxIcon },
+];
+
+const FOOTER_NAV: NavItem[] = [
+  { id: 'settings', label: 'Settings', Icon: SettingsIcon },
+  { id: 'help', label: 'Help Center', Icon: HelpIcon },
 ];
 
 export default function Sidebar({ view, onNavigate, projects, activeProjectId, onOpenProject, unreadCount }: SidebarProps) {
@@ -55,6 +62,19 @@ export default function Sidebar({ view, onNavigate, projects, activeProjectId, o
           ))}
         </div>
       )}
+
+      <nav className="nav sidebar-footer">
+        {FOOTER_NAV.map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            className={`nav-item ${view === id ? 'active' : ''}`}
+            onClick={() => onNavigate(id)}
+          >
+            <Icon />
+            <span>{label}</span>
+          </button>
+        ))}
+      </nav>
     </aside>
   );
 }

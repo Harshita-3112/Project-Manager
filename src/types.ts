@@ -36,4 +36,4 @@ export interface Notification {
   read: boolean;
 }
 
-export type View = 'home' | 'projects' | 'inbox';
+export type View = 'home' | 'projects' | 'inbox' | 'settings' | 'help';
